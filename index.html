@@ -59,7 +59,6 @@ body.ro #new,body.ro #edit,body.ro #del,body.ro #np,body.ro #pn,body.ro #rb,body
 </head>
 <body>
 <div class="wrap" id="app"></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.2/dist/umd/supabase.js"></script>
 <script>
 const SUPABASE_URL='PASTE_YOUR_PROJECT_URL';
 const SUPABASE_KEY='PASTE_YOUR_ANON_KEY';
@@ -451,7 +450,16 @@ function importAll(e){
 }
 lists=loadLists();songs=load()||[{id:'sample',title:'Amazing Grace',artist:'John Newton (public domain)',key:'G',body:'Verse 1\n[G]Amazing [G7]grace, how [C]sweet the [G]sound\nThat [G]saved a [Em]wretch like [D]me\nI [G]once was [G7]lost, but [C]now am [G]found\nWas [Em]blind but [D]now I [G]see'}];
 draw();
-initCloud();
+(function(){
+  const u=['https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.2/dist/umd/supabase.js','https://unpkg.com/@supabase/supabase-js@2.108.2','https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.2'];
+  let i=0;
+  function next(){
+    if(window.supabase){initCloud();return}
+    if(i>=u.length){cloudState='error';stat();return}
+    const t=document.createElement('script');t.src=u[i++];t.onload=next;t.onerror=next;document.head.appendChild(t);
+  }
+  next();
+})();
 </script>
 </body>
 </html>
