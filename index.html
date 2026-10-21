@@ -444,6 +444,7 @@ function normChart(c){
 function loadChart(){try{const s=localStorage.getItem('chordbook.chart');if(s){const c=JSON.parse(s);if(c&&c.leaders&&(c.rows||c.sections))return normChart(c)}}catch(e){}return defChart()}
 function saveChartLocal(){try{localStorage.setItem('chordbook.chart',JSON.stringify(chart))}catch(e){}}
 function saveChart(){saveChartLocal();pushChart()}
+function chartStat(){const e=document.getElementById('cstat');if(e)e.textContent=chartNote}
 function chartRedraw(){if(tab==='keys'&&view.name==='list'){const a=document.activeElement;if(!(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)))draw()}}
 function drawKeys(){
   const app=document.getElementById('app'),ed=!document.body.classList.contains('ro'),f=kq.toLowerCase(),L=chart.leaders;
@@ -462,7 +463,7 @@ function drawKeys(){
   if(!rows.length)h+='<tr><td colspan="'+(cols.length+1)+'" style="color:var(--mut)">'+(chart.rows.length?'No songs match your search.':'No songs yet.'+(ed?' Add titles below.':''))+'</td></tr>';
   h+='</tbody></table></div>';
   if(ed)h+='<div style="margin-top:14px"><textarea id="bulk" rows="3" placeholder="Add songs: one title per line" aria-label="Add songs" style="min-height:0;font-family:inherit;white-space:pre-wrap"></textarea><button class="pill sm" id="badd" style="margin-top:6px">Add songs</button></div>';
-  if(chartNote)h+='<p class="hint">'+esc(chartNote)+'</p>';
+  h+='<p class="hint" id="cstat">'+esc(chartNote)+'</p>';
   app.innerHTML=h+'</div>';
   bindTabs();
   const q=document.getElementById('kq');q.oninput=()=>{kq=q.value;const p=q.selectionStart;draw();const n=document.getElementById('kq');n.focus();n.setSelectionRange(p,p)};
@@ -489,7 +490,7 @@ function drawKeys(){
 function pushChart(){
   if(!chartCol||!canWrite)return;
   chartDirty=true;clearTimeout(chartT);
-  chartT=setTimeout(async()=>{try{const j=JSON.stringify(chart);if(j!==chartSynced){const r=await sb.from('charts').upsert({id:'main',data:chart});if(r.error)throw r.error;chartSynced=j}}catch(e){}chartDirty=false},700);
+  chartT=setTimeout(async()=>{try{const j=JSON.stringify(chart);if(j!==chartSynced){const r=await sb.from('charts').upsert({id:'main',data:chart});if(r.error)throw r.error;chartSynced=j}chartNote='Last change saved to the shared library.'}catch(e){chartNote='Could not save to the shared library ('+((e&&e.message)||'unknown error')+'). Your changes are kept on this device.'}chartDirty=false;chartStat()},700);
 }
 async function pullChart(){
   if(chartDirty)return;
