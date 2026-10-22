@@ -53,6 +53,10 @@ textarea{min-height:340px;font-family:ui-monospace,Menlo,Consolas,monospace;font
 body.ro #new,body.ro #edit,body.ro #del,body.ro #np,body.ro #pn,body.ro #rb,body.ro #pls,body.ro #sk,body.ro #imp,body.ro [data-up],body.ro [data-dn],body.ro [data-rm],body.ro [data-add]{display:none!important}
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}.dlg{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;max-width:380px;width:100%}.dlg p{margin:8px 0 16px}.dlg .danger{background:#e5484d;border-color:#e5484d;color:#fff}
 .kt{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin-top:8px}.kt table{border-collapse:collapse;width:100%;min-width:520px}.kt th,.kt td{padding:4px 6px;border-bottom:1px solid var(--line);text-align:left;font-size:15px}.kt th{background:var(--panel)}.kt .kg td{background:var(--panel);font-weight:700;font-size:13px;color:var(--mut)}.kt td:first-child{min-width:12em}
+.tpbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:4;background:var(--bg);padding:8px 0;margin:8px 0;border-bottom:1px solid var(--line)}
+.kt th:first-child,.kt td:first-child{position:sticky;left:0;z-index:1;background:var(--bg)}.kt th:first-child,.kt .kg td:first-child{background:var(--panel)}
+@media (max-width:600px){.wrap{padding:14px 12px 88px}h1{font-size:24px}.top{flex-wrap:wrap;gap:8px}.song{padding:14px}.grid2{grid-template-columns:1fr}textarea{min-height:48vh;font-size:16px}.sheet{margin-top:14px}.kt table{min-width:0}.kt td:first-child{min-width:9em}.item .main{flex-basis:100%}.sheet{overflow-wrap:anywhere}}
+@media (pointer:coarse){.pill,.pill.sm{min-height:44px}.pill.sm{padding:6px 16px}.item .pill.sm{padding:4px 12px;min-height:44px}input,select,textarea{font-size:16px}button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}}
 @media print{.bar,.top button,.noprint{display:none}body{background:#fff;color:#000}.ch{color:#000}}
 </style>
 </head>
@@ -223,7 +227,7 @@ function draw(){clearInterval(scrollT);
     app.innerHTML='<div class="top noprint"><button class="pill sm" id="back">Back</button><div class="row"><button class="pill sm" id="stg">Stage mode</button><button class="pill sm" id="pls">Playlists</button><button class="pill sm" id="edit">Edit</button><button class="pill sm danger" id="del">Delete</button></div></div>'+
       '<h1>'+esc(s.title)+'</h1><div style="color:var(--mut)">'+esc(s.artist||'')+(key?(s.artist?' · ':'')+'Original key '+esc(key):'')+'</div>'+
       plPanel(s)+'<div class="bar"><button class="pill sm '+(mode==='chords'?'on':'')+'" id="mc">Chords</button><button class="pill sm '+(mode==='lyrics'?'on':'')+'" id="ml">Lyrics</button><button class="pill sm" id="dl" style="margin-left:auto">Download JPEG</button></div>'+
-      '<div class="bar"><span>Transpose</span><span class="tp"><button class="pill sm" id="dn" aria-label="Down one semitone">−</button><span class="k" aria-live="polite">'+(tk||(shift>0?'+':'')+shift)+'</span><button class="pill sm" id="up" aria-label="Up one semitone">+</button></span>'+
+      '<div class="bar tpbar"><span>Transpose</span><span class="tp"><button class="pill sm" id="dn" aria-label="Down one semitone">−</button><span class="k" aria-live="polite">'+(tk||(shift>0?'+':'')+shift)+'</span><button class="pill sm" id="up" aria-label="Up one semitone">+</button></span>'+
       '<button class="pill sm" id="rs">Original key</button>'+(view.from&&tk?'<button class="pill sm" id="sk">Save key to playlist</button>':'')+'<span class="tp" style="margin-left:auto"><button class="pill sm" id="fm" aria-label="Smaller text">A−</button><button class="pill sm" id="fp" aria-label="Larger text">A+</button></span></div>'+
       '<div class="sheet" style="--fs:'+fs+'px">'+renderBody(s)+'</div>'+navHtml(s);
     const $=i=>document.getElementById(i);
