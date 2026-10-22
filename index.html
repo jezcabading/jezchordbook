@@ -75,7 +75,7 @@ const isChord=t=>{const m=CH.exec(t);return !!m&&SUF.test(m[2])};
 const SECT=/^\s*(\[?(verse|chorus|pre-?chorus|bridge|intro|outro|tag|interlude|instrumental|ending|refrain|turnaround)\b[^\[]*\]?)\s*:?\s*$/i;
 let songs=[],view={name:'list'},q='',mode='chords',shift=0,fs=18,memo=null;
 let lists=[],tab='songs',showPl=false,pq='',memo2=null;
-let chart=null,kq='',kl='all',chartDirty=false,chartT=null,chartSynced='',chartCol=null,chartNote='';
+let chart=null,kq='',kl='all',ks='all',chartDirty=false,chartT=null,chartSynced='',chartCol=null,chartNote='';
 let stage=false,auto=false,spd=3,sfs=26,scrollT=0,wl=null,cloud=null,cloudPath='',synced={},cloudState='local',pushT=null;
 
 function load(){try{const s=localStorage.getItem('chordbook.songs');if(s)return JSON.parse(s)}catch(e){}return memo}
@@ -442,7 +442,7 @@ function normChart(c){
   const o={id:'main',leaders:Array.isArray(c.leaders)?c.leaders:[],rows:[]};
   if(Array.isArray(c.rows))o.rows=c.rows;
   else if(Array.isArray(c.sections))c.sections.forEach(s=>(s.groups||[]).forEach(g=>(g.rows||[]).forEach(r=>o.rows.push(r))));
-  o.rows=o.rows.map(r=>({id:r.id||rid(),song:String(r.song||''),k:r.k||{}}));
+  o.rows=o.rows.map(r=>({id:r.id||rid(),song:String(r.song||''),k:r.k||{},slot:String(r.slot||'')}));
   return o;
 }
 function loadChart(){try{const s=localStorage.getItem('chordbook.chart');if(s){const c=JSON.parse(s);if(c&&c.leaders&&(c.rows||c.sections))return normChart(c)}}catch(e){}return defChart()}
@@ -450,6 +450,9 @@ function saveChartLocal(){try{localStorage.setItem('chordbook.chart',JSON.string
 function saveChart(){saveChartLocal();pushChart()}
 function chartStat(){const e=document.getElementById('cstat');if(e)e.textContent=chartNote}
 function chartRedraw(){if(tab==='keys'&&view.name==='list'){const a=document.activeElement;if(!(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)))draw()}}
+const SLOTS=['1st Song','2nd Song','3rd Song','4th Song','5th Song'];
+function slotLabel(v){return /^[1-5]$/.test(v)?SLOTS[+v-1]:''}
+function slotSel(r){return '<select data-slot="'+r.id+'" aria-label="Song slot for '+esc(r.song)+'" style="width:auto;min-width:7.5em;padding:6px 8px"><option value="">\u2014</option>'+SLOTS.map((n,i)=>'<option value="'+(i+1)+'"'+(r.slot===String(i+1)?' selected':'')+'>'+n+'</option>').join('')+'</select>'}
 function drawKeys(){
   const app=document.getElementById('app'),ed=!document.body.classList.contains('ro'),f=kq.toLowerCase(),L=chart.leaders;
   if(kl!=='all'&&!L.some(l=>l.id===kl))kl='all';
@@ -457,14 +460,15 @@ function drawKeys(){
   const inp=(a,v,w,al)=>'<input type="text" '+a+' value="'+esc(v)+'" aria-label="'+al+'" style="width:'+w+';min-width:0;padding:6px 8px">';
   let h='<div id="kroot"><div class="top"><h1>JEZ Chord Book</h1></div>'+tabsHtml()+'<p class="hint">The key each worship leader sings each song in, for reference. '+(ed?'Pick a leader, then type in the Key boxes. Changes save automatically.':'Pick a leader to see their keys.')+'</p>';
   h+='<div class="row" style="margin:10px 0"><label for="kl" style="margin:0">Leader</label><select id="kl" aria-label="Choose leader" style="width:auto;min-width:10em"><option value="all"'+(kl==='all'?' selected':'')+'>All leaders</option>'+L.map(l=>'<option value="'+l.id+'"'+(kl===l.id?' selected':'')+'>'+esc(l.name)+'</option>').join('')+'</select>';
+  h+='<label for="kf" style="margin:0">Filter</label><select id="kf" aria-label="Filter by song slot" style="width:auto;min-width:9em">'+[['all','All songs'],['1','1st Song'],['2','2nd Song'],['3','3rd Song'],['4','4th Song'],['5','5th Song'],['none','No slot']].map(o=>'<option value="'+o[0]+'"'+(ks===o[0]?' selected':'')+'>'+o[1]+'</option>').join('')+'</select>';
   if(ed&&cur)h+=inp('data-ln="'+cur.id+'"',cur.name,'9em','Rename leader')+'<button class="pill sm danger" data-ldel="'+cur.id+'">Delete leader</button>';
   h+='</div>';
   if(ed)h+='<div class="row" style="margin-bottom:10px"><input type="text" id="nl" placeholder="New leader name" aria-label="New leader name" style="flex:1;min-width:10em"><button class="pill sm" id="ladd">Add leader</button></div>';
   h+='<input type="search" id="kq" placeholder="Search songs" aria-label="Search songs" value="'+esc(kq)+'">';
-  const rows=chart.rows.slice().sort((a,b)=>a.song.localeCompare(b.song)).filter(r=>!f||r.song.toLowerCase().includes(f));
-  h+='<div class="kt"><table><thead><tr><th>Song</th>'+cols.map(l=>'<th>'+(cur?'Key':esc(l.name)+(ed?' <button class="pill sm" data-ldel="'+l.id+'" aria-label="Delete '+esc(l.name)+'" style="padding:0 8px;min-height:26px">\u2715</button>':''))+'</th>').join('')+'</tr></thead><tbody>';
-  rows.forEach(r=>{h+='<tr><td>'+(ed?'<div class="row" style="flex-wrap:nowrap;gap:4px">'+inp('data-rs="'+r.id+'"',r.song,'100%','Song')+'<button class="pill sm" data-rdel="'+r.id+'" aria-label="Remove song">\u2715</button></div>':esc(r.song))+'</td>'+cols.map(l=>'<td>'+(ed?inp('data-c="'+r.id+'" data-l="'+l.id+'"',r.k[l.id]||'','5em','Key'):esc(r.k[l.id]||''))+'</td>').join('')+'</tr>'});
-  if(!rows.length)h+='<tr><td colspan="'+(cols.length+1)+'" style="color:var(--mut)">'+(chart.rows.length?'No songs match your search.':'No songs yet.'+(ed?' Add titles below.':''))+'</td></tr>';
+  const rows=chart.rows.slice().sort((a,b)=>a.song.localeCompare(b.song)).filter(r=>(!f||r.song.toLowerCase().includes(f))&&(ks==='all'||(ks==='none'?!r.slot:r.slot===ks)));
+  h+='<div class="kt"><table><thead><tr><th>Song</th><th>Song slot</th>'+cols.map(l=>'<th>'+(cur?'Key':esc(l.name)+(ed?' <button class="pill sm" data-ldel="'+l.id+'" aria-label="Delete '+esc(l.name)+'" style="padding:0 8px;min-height:26px">\u2715</button>':''))+'</th>').join('')+'</tr></thead><tbody>';
+  rows.forEach(r=>{h+='<tr><td>'+(ed?'<div class="row" style="flex-wrap:nowrap;gap:4px">'+inp('data-rs="'+r.id+'"',r.song,'100%','Song')+'<button class="pill sm" data-rdel="'+r.id+'" aria-label="Remove song">\u2715</button></div>':esc(r.song))+'</td><td>'+(ed?slotSel(r):esc(slotLabel(r.slot)))+'</td>'+cols.map(l=>'<td>'+(ed?inp('data-c="'+r.id+'" data-l="'+l.id+'"',r.k[l.id]||'','5em','Key'):esc(r.k[l.id]||''))+'</td>').join('')+'</tr>'});
+  if(!rows.length)h+='<tr><td colspan="'+(cols.length+2)+'" style="color:var(--mut)">'+(chart.rows.length?'No songs match your search.':'No songs yet.'+(ed?' Add titles below.':''))+'</td></tr>';
   h+='</tbody></table></div>';
   if(ed)h+='<div style="margin-top:14px"><textarea id="bulk" rows="3" placeholder="Add songs: one title per line" aria-label="Add songs" style="min-height:0;font-family:inherit;white-space:pre-wrap"></textarea><button class="pill sm" id="badd" style="margin-top:6px">Add songs</button></div>';
   h+='<p class="hint" id="cstat">'+esc(chartNote)+'</p>';
@@ -480,13 +484,13 @@ function drawKeys(){
     else return;
     saveChart();
   };
-  root.onchange=e=>{const t=e.target;if(t.id==='kl'){kl=t.value;draw()}else if(t.dataset&&t.dataset.ln)draw()};
+  root.onchange=e=>{const t=e.target;if(t.id==='kl'){kl=t.value;draw()}else if(t.id==='kf'){ks=t.value;draw()}else if(t.dataset&&t.dataset.slot){chart.rows.forEach(r=>{if(r.id===t.dataset.slot)r.slot=t.value});saveChart()}else if(t.dataset&&t.dataset.ln)draw()};
   root.onclick=e=>{
     const b=e.target.closest('button');if(!b||b.dataset.tab)return;const d=b.dataset;
     if(b.id==='ladd'){const n=document.getElementById('nl').value.trim();if(!n){document.getElementById('nl').focus();return}const l={id:rid(),name:n};chart.leaders.push(l);kl=l.id}
     else if(d.ldel){const l=chart.leaders.find(x=>x.id===d.ldel);if(!l)return;return askDel('Delete the leader "'+l.name+'" and all of their keys?',()=>{chart.leaders=chart.leaders.filter(x=>x.id!==d.ldel);chart.rows.forEach(r=>{delete r.k[d.ldel]});kl='all';saveChart();draw()})}
     else if(d.rdel){const r0=chart.rows.find(r=>r.id===d.rdel);return askDel('Remove "'+((r0&&r0.song)||'this song')+'" from the chart?',()=>{chart.rows=chart.rows.filter(r=>r.id!==d.rdel);saveChart();draw()})}
-    else if(b.id==='badd'){const names=document.getElementById('bulk').value.split('\n').map(x=>x.trim()).filter(Boolean);names.forEach(n=>chart.rows.push({id:rid(),song:n,k:{}}))}
+    else if(b.id==='badd'){const names=document.getElementById('bulk').value.split('\n').map(x=>x.trim()).filter(Boolean);names.forEach(n=>chart.rows.push({id:rid(),song:n,k:{},slot:/^[1-5]$/.test(ks)?ks:''}))}
     else return;
     saveChart();draw();
   };
