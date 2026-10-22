@@ -57,6 +57,7 @@ body.ro #new,body.ro #edit,body.ro #del,body.ro #np,body.ro #pn,body.ro #rb,body
 .kt th:first-child,.kt td:first-child{position:sticky;left:0;z-index:1;background:var(--bg)}.kt th:first-child,.kt .kg td:first-child{background:var(--panel)}
 @media (max-width:600px){.wrap{padding:14px 12px 88px}h1{font-size:24px}.top{flex-wrap:wrap;gap:8px}.song{padding:14px}.grid2{grid-template-columns:1fr}textarea{min-height:48vh;font-size:16px}.sheet{margin-top:14px}.kt table{min-width:0}.kt td:first-child{min-width:9em}.item .main{flex-basis:100%}.sheet{overflow-wrap:anywhere}}
 @media (pointer:coarse){.pill,.pill.sm{min-height:44px}.pill.sm{padding:6px 16px}.item .pill.sm{padding:4px 12px;min-height:44px}input,select,textarea{font-size:16px}button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}}
+button.pill.sm[data-rm],button.pill.sm[data-rdel],button.pill.sm[data-ldel]:not(.danger){min-height:22px;width:22px;padding:0;font-size:10px;line-height:1;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
 @media print{.bar,.top button,.noprint{display:none}body{background:#fff;color:#000}.ch{color:#000}}
 </style>
 </head>
@@ -466,7 +467,7 @@ function drawKeys(){
   if(ed)h+='<div class="row" style="margin-bottom:10px"><input type="text" id="nl" placeholder="New leader name" aria-label="New leader name" style="flex:1;min-width:10em"><button class="pill sm" id="ladd">Add leader</button></div>';
   h+='<input type="search" id="kq" placeholder="Search songs" aria-label="Search songs" value="'+esc(kq)+'">';
   const rows=chart.rows.slice().sort((a,b)=>a.song.localeCompare(b.song)).filter(r=>(!f||r.song.toLowerCase().includes(f))&&(ks==='all'||(ks==='none'?!r.slot:r.slot===ks)));
-  h+='<div class="kt"><table><thead><tr><th>Song</th><th>Song slot</th>'+cols.map(l=>'<th>'+(cur?'Key':esc(l.name)+(ed?' <button class="pill sm" data-ldel="'+l.id+'" aria-label="Delete '+esc(l.name)+'" style="padding:0 8px;min-height:26px">\u2715</button>':''))+'</th>').join('')+'</tr></thead><tbody>';
+  h+='<div class="kt"><table><thead><tr><th>Song</th><th>Song slot</th>'+cols.map(l=>'<th>'+(cur?'Key':esc(l.name)+(ed?' <button class="pill sm" data-ldel="'+l.id+'" aria-label="Delete '+esc(l.name)+'" style="padding:0;min-height:20px;width:20px;font-size:10px">\u2715</button>':''))+'</th>').join('')+'</tr></thead><tbody>';
   rows.forEach(r=>{h+='<tr><td>'+(ed?'<div class="row" style="flex-wrap:nowrap;gap:4px">'+inp('data-rs="'+r.id+'"',r.song,'100%','Song')+'<button class="pill sm" data-rdel="'+r.id+'" aria-label="Remove song">\u2715</button></div>':esc(r.song))+'</td><td>'+(ed?slotSel(r):esc(slotLabel(r.slot)))+'</td>'+cols.map(l=>'<td>'+(ed?inp('data-c="'+r.id+'" data-l="'+l.id+'"',r.k[l.id]||'','5em','Key'):esc(r.k[l.id]||''))+'</td>').join('')+'</tr>'});
   if(!rows.length)h+='<tr><td colspan="'+(cols.length+2)+'" style="color:var(--mut)">'+(chart.rows.length?'No songs match your search.':'No songs yet.'+(ed?' Add titles below.':''))+'</td></tr>';
   h+='</tbody></table></div>';
