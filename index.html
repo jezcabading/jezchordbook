@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>JEZ Chord Book</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0f1317">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Chord Book">
+<link rel="apple-touch-icon" href="icon-192.png">
 <style>
 :root{--bg:#0f1317;--panel:#181e24;--line:#2a333c;--tx:#eef1f4;--mut:#93a0ad;--ch:#6ee7b7;--acc:#6ee7b7;--acctx:#06231a;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -50,7 +56,7 @@ textarea{min-height:340px;font-family:ui-monospace,Menlo,Consolas,monospace;font
 .foot{margin-top:28px;padding-top:16px;border-top:1px solid var(--line)}
 .item{flex-wrap:wrap;display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-top:8px}.item .main{flex:1 1 40%;text-align:left;background:none;border:0;cursor:pointer;padding:4px;min-width:0}.item .main b{display:block;font-weight:600}.item .main span{color:var(--mut);font-size:14px}.item .pill.sm{padding:2px 10px;min-height:34px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-top:12px}.panel label{display:flex;gap:8px;align-items:center;margin:8px 0;color:var(--tx);font-size:16px}h2{font-size:18px;margin:26px 0 4px}
 .stgbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--line)}.stt{flex:1 1 100%;font-size:1.1rem}body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
-body.ro #new,body.ro #edit,body.ro #del,body.ro #np,body.ro #pn,body.ro #rb,body.ro #pls,body.ro #sk,body.ro #imp,body.ro [data-up],body.ro [data-dn],body.ro [data-rm],body.ro [data-add]{display:none!important}
+body.ro #new,body.ro #edit,body.ro #del,body.ro #imp{display:none!important}
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}.dlg{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;max-width:380px;width:100%}.dlg p{margin:8px 0 16px}.dlg .danger{background:#e5484d;border-color:#e5484d;color:#fff}
 .kt{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin-top:8px}.kt table{border-collapse:collapse;width:100%;min-width:520px}.kt th,.kt td{padding:4px 6px;border-bottom:1px solid var(--line);text-align:left;font-size:15px}.kt th{background:var(--panel)}.kt .kg td{background:var(--panel);font-weight:700;font-size:13px;color:var(--mut)}.kt td:first-child{min-width:12em}
 .tpbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:4;background:var(--bg);padding:8px 0;margin:8px 0;border-bottom:1px solid var(--line)}
@@ -58,6 +64,33 @@ body.ro #new,body.ro #edit,body.ro #del,body.ro #np,body.ro #pn,body.ro #rb,body
 @media (max-width:600px){.wrap{padding:14px 12px 88px}h1{font-size:24px}.top{flex-wrap:wrap;gap:8px}.song{padding:14px}.grid2{grid-template-columns:1fr}textarea{min-height:48vh;font-size:16px}.sheet{margin-top:14px}.kt table{min-width:0}.kt td:first-child{min-width:9em}.item .main{flex-basis:100%}.sheet{overflow-wrap:anywhere}}
 @media (pointer:coarse){.pill,.pill.sm{min-height:44px}.pill.sm{padding:6px 16px}.item .pill.sm{padding:4px 12px;min-height:44px}input,select,textarea{font-size:16px}button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}}
 button.pill.sm[data-rm],button.pill.sm[data-rdel],button.pill.sm[data-ldel]:not(.danger){min-height:22px;width:22px;padding:0;font-size:10px;line-height:1;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
+.pill.sm.ic{padding:0;width:40px;min-width:40px;display:inline-flex;align-items:center;justify-content:center}.pill.ic svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}@media (pointer:coarse){.pill.sm.ic{width:44px;min-width:44px}}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (max-width:600px){
+.wrap{padding:10px max(10px,env(safe-area-inset-left,0px)) 88px max(10px,env(safe-area-inset-right,0px))}
+.top{margin-bottom:10px}
+.top .row{gap:6px;flex-wrap:nowrap}
+.bar{gap:6px;margin:10px 0}
+.pill.sm{white-space:nowrap}
+.tpbar{margin:6px 0;padding:6px 0;flex-wrap:nowrap;overflow-x:auto;gap:6px;scrollbar-width:none}
+.tpbar::-webkit-scrollbar{display:none}
+.tpbar>span:first-child{display:none}
+.tpbar .tp{flex:0 0 auto;gap:4px}
+.tpbar .tp .k{min-width:2.6em;font-size:17px}
+.tpbar .pill.sm{padding:4px 10px;min-width:40px;flex:0 0 auto}
+.tpbar .pill.sm.ic{width:40px;padding:0}
+.stgbar{flex-wrap:nowrap;overflow-x:auto;gap:6px;padding:6px 0;scrollbar-width:none}
+.stgbar::-webkit-scrollbar{display:none}
+.stgbar>*{flex:0 0 auto}
+.stgbar .tp{gap:4px}
+.stgbar .pill.sm{padding:4px 10px;min-width:40px;white-space:nowrap}
+.stgbar .stt{flex:0 1 auto;max-width:38vw;font-size:1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.panel{padding:10px 12px}
+.dlg{padding:16px}
+}
+@media (max-width:360px){.song{padding:12px 10px}h1{font-size:22px}.tpbar .tp .k{min-width:2.2em}}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;align-items:center;gap:12px;max-width:calc(100% - 24px);background:var(--tx);color:var(--bg);border-radius:12px;padding:8px 8px 8px 16px;box-shadow:0 6px 24px rgba(0,0,0,.35)}.toast span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.toast .pill{border-color:var(--bg);color:var(--bg);flex:0 0 auto}
 @media print{.bar,.top button,.noprint{display:none}body{background:#fff;color:#000}.ch{color:#000}}
 </style>
 </head>
@@ -74,6 +107,8 @@ const SUF=/^(maj|min|m|M|dim|aug|sus|add|\+|°|ø|-|\d|#|b|\(|\))*$/;
 const CH=/^([A-G][#b]?)([^\s\/]*)(?:\/([A-G][#b]?))?$/;
 const isChord=t=>{const m=CH.exec(t);return !!m&&SUF.test(m[2])};
 const SECT=/^\s*(\[?(verse|chorus|pre-?chorus|bridge|intro|outro|tag|interlude|instrumental|ending|refrain|turnaround)\b[^\[]*\]?)\s*:?\s*$/i;
+const IC=(d)=>'<svg viewBox="0 0 24 24" aria-hidden="true">'+d+'</svg>';
+const ICO={stage:IC('<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>'),pl:IC('<path d="M4 6h12M4 12h8M4 18h8"/><path d="M17 13v7M13.5 16.5h7"/>'),del:IC('<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 10v6M14 10v6"/>'),save:IC('<path d="M5 3h12l2 2v16H5z"/><path d="M8 3v6h8V3M8 21v-7h8v7"/>'),orig:IC('<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>'),dl:IC('<path d="M12 3v12M7 10l5 5 5-5M4 21h16"/>'),ok:IC('<path d="M5 12l5 5 9-10"/>')};
 let songs=[],view={name:'list'},q='',mode='chords',shift=0,fs=18,memo=null;
 let lists=[],tab='songs',showPl=false,pq='',memo2=null;
 let chart=null,kq='',kl='all',ks='all',chartDirty=false,chartT=null,chartSynced='',chartCol=null,chartNote='';
@@ -153,6 +188,28 @@ function keySel(l,s){
 function go(v){view=v;shift=startShift(v);showPl=false;draw();window.scrollTo(0,0)}
 function tabsHtml(){return '<div class="bar"><button class="pill sm '+(tab==='songs'?'on':'')+'" data-tab="songs">Songs ('+songs.length+')</button><button class="pill sm '+(tab==='lists'?'on':'')+'" data-tab="lists">Playlists ('+lists.length+')</button><button class="pill sm '+(tab==='keys'?'on':'')+'" data-tab="keys">Leader keys</button></div>'}
 function bindTabs(){document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;draw()})}
+let lkNote='';
+const nk=t=>String(t||'').toLowerCase().replace(/[^a-z0-9]+/g,'');
+function leaderKeyFor(ld,s){
+  const t=nk(s.title),r=chart&&chart.rows&&chart.rows.find(x=>nk(x.song)===t);if(!r||!r.k)return null;
+  const k=String(r.k[ld]||'').trim().replace(/^[a-g]/,c=>c.toUpperCase()),m=/^[A-G][#b]?/.exec(k);
+  return m&&IDX[m[0]]!==undefined?m[0]:null;
+}
+function applyLeader(l,ld,only){
+  l.keys=l.keys||{};
+  if(!ld){if(!only){l.keys={};delete l.leader}return {set:0,miss:[]}}
+  if(!only)l.leader=ld;
+  let set=0;const miss=[];
+  (only?[only]:l.songIds).forEach(id=>{
+    const s=songs.find(x=>x.id===id);if(!s)return;
+    const t=leaderKeyFor(ld,s),o=/^[A-G][#b]?/.exec(songKey(s)||'');
+    if(!t||!o||IDX[o[0]]===undefined){miss.push(s.title);return}
+    if(IDX[t]===IDX[o[0]])delete l.keys[id];else l.keys[id]=t;
+    set++;
+  });
+  return {set,miss};
+}
+function addToList(l,id){if(l.songIds.includes(id))return;l.songIds.push(id);if(l.leader)applyLeader(l,l.leader,id)}
 function mkList(name){const l={id:uid(),name,songIds:[]};lists.push(l);return l}
 function drawLists(){
   const app=document.getElementById('app');
@@ -166,24 +223,32 @@ function drawLists(){
 function drawPl(){
   const l=lists.find(x=>x.id===view.id);if(!l){tab='lists';return go({name:'list'})}
   l.songIds=l.songIds.filter(id=>songs.some(s=>s.id===id));
+  const note=lkNote;lkNote='';
   const app=document.getElementById('app'),ss=l.songIds.map(id=>songs.find(s=>s.id===id));
   const avail=songs.filter(s=>(s.title+' '+(s.artist||'')).toLowerCase().includes(pq.toLowerCase())).sort((a,b)=>a.title.localeCompare(b.title));
   app.innerHTML='<div class="top"><button class="pill sm" id="back">Back</button><button class="pill sm danger" id="del">Delete playlist</button></div>'+
    '<div class="row"><input type="text" id="rn" value="'+esc(l.name)+'" aria-label="Playlist name" style="flex:1;font-size:22px;font-weight:700"><button class="pill sm" id="rb">Rename</button></div>'+
    '<p class="hint">'+ss.length+' songs. Tap a song to open it, then use Previous and Next to move through the playlist. To change a song’s key, open it, transpose, and tap Save key to playlist.</p>'+
+   (chart&&chart.leaders&&chart.leaders.length?'<div class="panel"><b>Leader keys</b><div class="row" style="margin-top:8px"><select id="lk" aria-label="Choose leader for this playlist" style="flex:1;min-width:9em"><option value="">Original keys</option>'+chart.leaders.map(x=>'<option value="'+x.id+'"'+(l.leader===x.id?' selected':'')+'>'+esc(x.name)+'</option>').join('')+'</select><button class="pill sm pri" id="lka">Apply keys</button></div><p class="hint" id="lkm">'+(esc(note)||'Sets every song to the key that leader sings it in (from the Leader keys tab). Songs you add later follow the same leader.')+'</p></div>':'')+
    '<div>'+(ss.length?ss.map((s,i)=>'<div class="item"><button class="main" data-open="'+s.id+'"><b>'+esc(s.title)+'</b><span>'+esc(s.artist||'')+'</span></button>'+keyLbl(l,s)+'<button class="pill sm" data-up="'+i+'" aria-label="Move up">↑</button><button class="pill sm" data-dn="'+i+'" aria-label="Move down">↓</button><button class="pill sm" data-rm="'+i+'" aria-label="Remove from playlist">✕</button></div>').join(''):'<div class="empty">This playlist is empty. Add songs below.</div>')+'</div>'+
    '<h2>Add songs</h2><p class="hint">Adding a song here only links it to this playlist. It stays in your library and can be in as many playlists as you like.</p><input type="search" id="pq" placeholder="Search your library" aria-label="Search your library" value="'+esc(pq)+'">'+
    '<div>'+(avail.length?avail.map(s=>'<div class="item"><div class="main"><b>'+esc(s.title)+'</b><span>'+esc(s.artist||'')+'</span></div>'+(l.songIds.includes(s.id)?'<button class="pill sm" data-add="x" disabled style="opacity:.6">Added</button>':'<button class="pill sm" data-add="'+s.id+'">Add</button>')+'</div>').join(''):'<div class="empty">'+(songs.length?'No songs match your search.':'Add songs to your library first.')+'</div>')+'</div>';
   const $=i=>document.getElementById(i),ids=l.songIds;
   $('back').onclick=()=>{tab='lists';go({name:'list'})};
   $('rb').onclick=()=>{const n=$('rn').value.trim();if(n){l.name=n;save();$('rb').textContent='Renamed'}};
-  $('del').onclick=()=>askDel('Delete the playlist “'+l.name+'”? The songs stay in your library.',()=>{lists=lists.filter(x=>x.id!==l.id);save();tab='lists';go({name:'list'})});
+  $('del').onclick=()=>askDel('Delete the playlist “'+l.name+'”? The songs stay in your library.',()=>{const bl=JSON.stringify(lists);lists=lists.filter(x=>x.id!==l.id);save();tab='lists';go({name:'list'});undoToast('Deleted playlist “'+l.name+'”',()=>{lists=JSON.parse(bl);tab='lists';save();draw()})});
   const pi=$('pq');pi.oninput=()=>{pq=pi.value;const p=pi.selectionStart;draw();const n=$('pq');n.focus();n.setSelectionRange(p,p)};
   app.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>go({name:'song',id:b.dataset.open,from:l.id}));
   app.querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>{const i=+b.dataset.up;if(i>0){[ids[i-1],ids[i]]=[ids[i],ids[i-1]];save();draw()}});
   app.querySelectorAll('[data-dn]').forEach(b=>b.onclick=()=>{const i=+b.dataset.dn;if(i<ids.length-1){[ids[i+1],ids[i]]=[ids[i],ids[i+1]];save();draw()}});
   app.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{ids.splice(+b.dataset.rm,1);save();draw()});
-  app.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{ids.push(b.dataset.add);save();draw()});
+  app.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{addToList(l,b.dataset.add);save();draw()});
+  const lka=$('lka');if(lka)lka.onclick=()=>{
+    const ld=$('lk').value,r=applyLeader(l,ld),ldr=chart.leaders.find(x=>x.id===ld);
+    save();
+    lkNote=!ld?'Back to each song’s original key.':'Set '+r.set+' of '+ids.length+' songs to '+((ldr&&ldr.name)||'that leader')+'’s keys.'+(r.miss.length?' No key listed for: '+r.miss.join(', ')+'.':'');
+    draw();
+  };
 }
 function plPanel(s){
   if(!showPl)return '';
@@ -199,8 +264,8 @@ function navHtml(s){
 function bindPl(s){
   const $=i=>document.getElementById(i);
   $('pls').onclick=()=>{showPl=!showPl;draw()};
-  document.querySelectorAll('[data-pl]').forEach(c=>c.onchange=()=>{const l=lists.find(x=>x.id===c.dataset.pl);if(!l)return;if(c.checked){if(!l.songIds.includes(s.id))l.songIds.push(s.id)}else l.songIds=l.songIds.filter(i=>i!==s.id);save();draw()});
-  const nb=$('npb');if(nb)nb.onclick=()=>{const n=$('npn').value.trim();if(!n){$('npn').focus();return}const l=mkList(n);l.songIds.push(s.id);save();draw()};
+  document.querySelectorAll('[data-pl]').forEach(c=>c.onchange=()=>{const l=lists.find(x=>x.id===c.dataset.pl);if(!l)return;if(c.checked){addToList(l,s.id)}else l.songIds=l.songIds.filter(i=>i!==s.id);save();draw()});
+  const nb=$('npb');if(nb)nb.onclick=()=>{const n=$('npn').value.trim();if(!n){$('npn').focus();return}const l=mkList(n);addToList(l,s.id);save();draw()};
   const l=view.from&&lists.find(x=>x.id===view.from);
   document.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>{const j=l.songIds.indexOf(s.id)+ +b.dataset.nav,id=l.songIds[j];if(id)go({name:'song',id,from:l.id})});
 }
@@ -225,20 +290,20 @@ function draw(){clearInterval(scrollT);
     const s=songs.find(x=>x.id===view.id);if(!s)return go({name:'list'});
     const key=songKey(s),tk=key?tr(key,shift,key):'';
     if(stage){drawStage(s,key,tk);return}
-    app.innerHTML='<div class="top noprint"><button class="pill sm" id="back">Back</button><div class="row"><button class="pill sm" id="stg">Stage mode</button><button class="pill sm" id="pls">Playlists</button><button class="pill sm" id="edit">Edit</button><button class="pill sm danger" id="del">Delete</button></div></div>'+
+    app.innerHTML='<div class="top noprint"><button class="pill sm" id="back">Back</button><div class="row"><button class="pill sm ic" id="stg" aria-label="Stage mode" title="Stage mode">'+ICO.stage+'</button><button class="pill sm ic" id="pls" aria-label="Playlists" title="Playlists">'+ICO.pl+'</button><button class="pill sm" id="edit">Edit</button><button class="pill sm ic danger" id="del" aria-label="Delete song" title="Delete song">'+ICO.del+'</button></div></div>'+
       '<h1>'+esc(s.title)+'</h1><div style="color:var(--mut)">'+esc(s.artist||'')+(key?(s.artist?' · ':'')+'Original key '+esc(key):'')+'</div>'+
-      plPanel(s)+'<div class="bar"><button class="pill sm '+(mode==='chords'?'on':'')+'" id="mc">Chords</button><button class="pill sm '+(mode==='lyrics'?'on':'')+'" id="ml">Lyrics</button><button class="pill sm" id="dl" style="margin-left:auto">Download JPEG</button></div>'+
+      plPanel(s)+'<div class="bar"><button class="pill sm '+(mode==='chords'?'on':'')+'" id="mc">Chords</button><button class="pill sm '+(mode==='lyrics'?'on':'')+'" id="ml">Lyrics</button><button class="pill sm ic" id="dl" style="margin-left:auto" aria-label="Download JPEG" title="Download JPEG">'+ICO.dl+'</button></div>'+
       '<div class="bar tpbar"><span>Transpose</span><span class="tp"><button class="pill sm" id="dn" aria-label="Down one semitone">−</button><span class="k" aria-live="polite">'+(tk||(shift>0?'+':'')+shift)+'</span><button class="pill sm" id="up" aria-label="Up one semitone">+</button></span>'+
-      '<button class="pill sm" id="rs">Original key</button>'+(view.from&&tk?'<button class="pill sm" id="sk">Save key to playlist</button>':'')+'<span class="tp" style="margin-left:auto"><button class="pill sm" id="fm" aria-label="Smaller text">A−</button><button class="pill sm" id="fp" aria-label="Larger text">A+</button></span></div>'+
+      '<button class="pill sm ic" id="rs" aria-label="Original key" title="Original key">'+ICO.orig+'</button>'+(view.from&&tk?'<button class="pill sm ic" id="sk" aria-label="Save key to playlist" title="Save key to playlist">'+ICO.save+'</button>':'')+'<span class="tp" style="margin-left:auto"><button class="pill sm" id="fm" aria-label="Smaller text">A−</button><button class="pill sm" id="fp" aria-label="Larger text">A+</button></span></div>'+
       '<div class="sheet" style="--fs:'+fs+'px">'+renderBody(s)+'</div>'+navHtml(s);
     const $=i=>document.getElementById(i);
     $('back').onclick=()=>go(view.from&&lists.some(x=>x.id===view.from)?{name:'pl',id:view.from}:{name:'list'});
     $('edit').onclick=()=>go({name:'edit',id:s.id});
-    $('del').onclick=()=>askDel('Delete “'+s.title+'”? It will also be removed from every playlist.',()=>{songs=songs.filter(x=>x.id!==s.id);lists.forEach(l=>l.songIds=l.songIds.filter(i=>i!==s.id));save();go({name:'list'})});
+    $('del').onclick=()=>askDel('Delete “'+s.title+'”? It will also be removed from every playlist.',()=>{const bs=JSON.stringify(songs),bl=JSON.stringify(lists);songs=songs.filter(x=>x.id!==s.id);lists.forEach(l=>l.songIds=l.songIds.filter(i=>i!==s.id));save();go({name:'list'});undoToast('Deleted “'+s.title+'”',()=>{songs=JSON.parse(bs);lists=JSON.parse(bl);save();draw()})});
     $('mc').onclick=()=>{mode='chords';draw()};$('ml').onclick=()=>{mode='lyrics';draw()};
     $('up').onclick=()=>{shift=(shift+1)%12;draw()};$('dn').onclick=()=>{shift=(shift+11)%12;draw()};
     $('rs').onclick=()=>{shift=0;draw()};bindPl(s);$('dl').onclick=()=>dlJpeg(s,$('dl'));$('stg').onclick=()=>{stage=true;if(navigator.wakeLock)navigator.wakeLock.request('screen').then(x=>{wl=x}).catch(()=>{});draw();window.scrollTo(0,0)};
-    const sk=$('sk');if(sk)sk.onclick=()=>{const l=lists.find(x=>x.id===view.from);if(!l)return;const o=/^[A-G][#b]?/.exec(tk);if(!o)return;l.keys=l.keys||{};if(shift===0)delete l.keys[s.id];else l.keys[s.id]=o[0];save();sk.textContent='Key saved'};
+    const sk=$('sk');if(sk)sk.onclick=()=>{const l=lists.find(x=>x.id===view.from);if(!l)return;const o=/^[A-G][#b]?/.exec(tk);if(!o)return;l.keys=l.keys||{};if(shift===0)delete l.keys[s.id];else l.keys[s.id]=o[0];save();sk.innerHTML=ICO.ok;sk.title=sk.ariaLabel='Key saved'};
     $('fm').onclick=()=>{fs=Math.max(12,fs-2);draw()};$('fp').onclick=()=>{fs=Math.min(40,fs+2);draw()};
   }else{
     const s=songs.find(x=>x.id===view.id)||{title:'',artist:'',key:'',body:''};
@@ -259,7 +324,7 @@ function draw(){clearInterval(scrollT);
     };
   }
 }
-function syncText(){return !CFG_OK?'Supabase is not set up yet, so songs are saved in this browser only.':cloudState==='cloud'?(canWrite?'Shared band library: changes you make are saved for everyone.':'You are viewing the shared library. Sign in with an editor email to add or change songs.'):cloudState==='error'?'Could not reach the shared library just now. Songs are still saved on this device.':'Connecting to the shared library...'}
+function syncText(){return !CFG_OK?'Supabase is not set up yet, so songs are saved in this browser only.':cloudState==='cloud'?(canWrite?'Shared band library: changes you make are saved for everyone.':'You can create playlists and add songs to them. Sign in with an editor email to add or change songs.'):cloudState==='error'?'Could not reach the shared library just now. Songs are still saved on this device.':'Connecting to the shared library...'}
 function stat(){const e=document.getElementById('sync');if(e)e.textContent=syncText()}
 let canWrite=false,dirty=false,sb=null,session=null,pullT=null;
 const CFG_OK=!/^PASTE/.test(SUPABASE_URL)&&!/^PASTE/.test(SUPABASE_KEY);
@@ -322,19 +387,19 @@ async function initCloud(){
     sb.channel('band').on('postgres_changes',{event:'*',schema:'public',table:'songs'},pull).on('postgres_changes',{event:'*',schema:'public',table:'lists'},pull).subscribe();
   }catch(e){cloudState='error';stat()}
 }
-function push(){if(!cloud||!canWrite)return;dirty=true;clearTimeout(pushT);pushT=setTimeout(doPush,700)}
+function push(){if(!cloud)return;dirty=true;clearTimeout(pushT);pushT=setTimeout(doPush,700)}
 async function doPush(){
   try{
     const sm={},lm={},su=[],lu=[];
     songs.forEach(s=>{const j=JSON.stringify(s);sm[s.id]=j;if(synced.songs[s.id]!==j)su.push({id:s.id,data:s})});
     lists.forEach(l=>{const j=JSON.stringify(l);lm[l.id]=j;if(synced.lists[l.id]!==j)lu.push({id:l.id,data:l})});
-    if(su.length){const r=await sb.from('songs').upsert(su);if(r.error)throw r.error}
+    if(canWrite&&su.length){const r=await sb.from('songs').upsert(su);if(r.error)throw r.error}
     if(lu.length){const r=await sb.from('lists').upsert(lu);if(r.error)throw r.error}
-    const ds=Object.keys(synced.songs).filter(k=>!sm[k]);
+    const ds=canWrite?Object.keys(synced.songs).filter(k=>!sm[k]):[];
     if(ds.length){const r=await sb.from('songs').delete().in('id',ds);if(r.error)throw r.error}
-    const dl=Object.keys(synced.lists).filter(k=>!lm[k]);
+    const dl=canWrite?Object.keys(synced.lists).filter(k=>!lm[k]):[];
     if(dl.length){const r=await sb.from('lists').delete().in('id',dl);if(r.error)throw r.error}
-    synced.songs=sm;synced.lists=lm;cloudState='cloud';
+    if(canWrite)synced.songs=sm;synced.lists=lm;cloudState='cloud';
   }catch(e){cloudState='error'}
   dirty=false;stat();
 }
@@ -411,18 +476,26 @@ function songCanvas(s,sh,md){
   return cv;
 }
 async function dlJpeg(s,btn){
-  const old=btn.textContent;
+  const old=btn.innerHTML;
   try{
-    btn.disabled=true;btn.textContent='Making image...';
+    btn.disabled=true;btn.textContent='…';btn.title='Making image...';
     const cv=songCanvas(s,shift,mode);
     const blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',0.92));
     if(!blob)throw 0;
     const key=songKey(s),tk=key?tr(key,shift,key):'';
     const name=((s.title+(tk?' - Key of '+tk:'')).replace(/[/:*?"<>|]/g,'').trim()||'chord-chart')+'.jpg';
     const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);
-    btn.textContent='Saved';
-  }catch(e){btn.textContent=e&&e.code==='declined'?'Download cancelled':'Could not save'}
-  setTimeout(()=>{btn.textContent=old;btn.disabled=false},2500);
+    btn.innerHTML=ICO.ok;btn.title='Saved';
+  }catch(e){btn.textContent='✕';btn.title=e&&e.code==='declined'?'Download cancelled':'Could not save'}
+  setTimeout(()=>{btn.innerHTML=old;btn.title='Download JPEG';btn.disabled=false},2500);
+}
+let toastT=null;
+function undoToast(msg,restore){
+  const old=document.getElementById('toast');if(old)old.remove();clearTimeout(toastT);
+  const t=document.createElement('div');t.id='toast';t.className='toast noprint';t.setAttribute('role','status');
+  t.innerHTML='<span></span><button class="pill sm">Undo</button>';t.querySelector('span').textContent=msg;
+  t.querySelector('button').onclick=()=>{clearTimeout(toastT);t.remove();restore()};
+  document.body.appendChild(t);toastT=setTimeout(()=>t.remove(),10000);
 }
 function askDel(msg,yes){
   const o=document.createElement('div');o.className='ov';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');
@@ -466,12 +539,12 @@ function drawKeys(){
   h+='</div>';
   if(ed)h+='<div class="row" style="margin-bottom:10px"><input type="text" id="nl" placeholder="New leader name" aria-label="New leader name" style="flex:1;min-width:10em"><button class="pill sm" id="ladd">Add leader</button></div>';
   h+='<input type="search" id="kq" placeholder="Search songs" aria-label="Search songs" value="'+esc(kq)+'">';
+  if(ed)h+='<div style="margin:8px 0 0"><textarea id="bulk" rows="3" placeholder="Add songs: one title per line" aria-label="Add songs" style="min-height:0;font-family:inherit;white-space:pre-wrap"></textarea><button class="pill sm" id="badd" style="margin-top:6px">Add songs</button></div>';
   const rows=chart.rows.slice().sort((a,b)=>a.song.localeCompare(b.song)).filter(r=>(!f||r.song.toLowerCase().includes(f))&&(ks==='all'||(ks==='none'?!r.slot:r.slot===ks)));
   h+='<div class="kt"><table><thead><tr><th>Song</th><th>Song slot</th>'+cols.map(l=>'<th>'+(cur?'Key':esc(l.name)+(ed?' <button class="pill sm" data-ldel="'+l.id+'" aria-label="Delete '+esc(l.name)+'" style="padding:0;min-height:20px;width:20px;font-size:10px">\u2715</button>':''))+'</th>').join('')+'</tr></thead><tbody>';
   rows.forEach(r=>{h+='<tr><td>'+(ed?'<div class="row" style="flex-wrap:nowrap;gap:4px">'+inp('data-rs="'+r.id+'"',r.song,'100%','Song')+'<button class="pill sm" data-rdel="'+r.id+'" aria-label="Remove song">\u2715</button></div>':esc(r.song))+'</td><td>'+(ed?slotSel(r):esc(slotLabel(r.slot)))+'</td>'+cols.map(l=>'<td>'+(ed?inp('data-c="'+r.id+'" data-l="'+l.id+'"',r.k[l.id]||'','5em','Key'):esc(r.k[l.id]||''))+'</td>').join('')+'</tr>'});
   if(!rows.length)h+='<tr><td colspan="'+(cols.length+2)+'" style="color:var(--mut)">'+(chart.rows.length?'No songs match your search.':'No songs yet.'+(ed?' Add titles below.':''))+'</td></tr>';
   h+='</tbody></table></div>';
-  if(ed)h+='<div style="margin-top:14px"><textarea id="bulk" rows="3" placeholder="Add songs: one title per line" aria-label="Add songs" style="min-height:0;font-family:inherit;white-space:pre-wrap"></textarea><button class="pill sm" id="badd" style="margin-top:6px">Add songs</button></div>';
   h+='<p class="hint" id="cstat">'+esc(chartNote)+'</p>';
   app.innerHTML=h+'</div>';
   bindTabs();
@@ -527,7 +600,7 @@ function exportAll(){
 function importAll(e){
   const f=e.target.files[0];if(!f)return;const r=new FileReader(),msg=document.getElementById('msg');
   r.onload=()=>{try{
-    let d=JSON.parse(r.result);if(d&&!Array.isArray(d)&&Array.isArray(d.songs)){if(d.chart&&d.chart.leaders&&(d.chart.rows||d.chart.sections)){chart=normChart(d.chart);saveChart()}(d.lists||[]).forEach(l=>{if(l&&l.id&&l.name){const j=lists.findIndex(y=>y.id===l.id),rl={id:l.id,name:String(l.name),songIds:Array.isArray(l.songIds)?l.songIds.map(String):[],keys:(l.keys&&typeof l.keys==='object')?l.keys:{}};if(j>=0)lists[j]=rl;else lists.push(rl)}});d=d.songs}if(!Array.isArray(d))throw 0;
+    let d=JSON.parse(r.result);if(d&&!Array.isArray(d)&&Array.isArray(d.songs)){if(d.chart&&d.chart.leaders&&(d.chart.rows||d.chart.sections)){chart=normChart(d.chart);saveChart()}(d.lists||[]).forEach(l=>{if(l&&l.id&&l.name){const j=lists.findIndex(y=>y.id===l.id),rl={id:l.id,name:String(l.name),leader:l.leader?String(l.leader):undefined,songIds:Array.isArray(l.songIds)?l.songIds.map(String):[],keys:(l.keys&&typeof l.keys==='object')?l.keys:{}};if(j>=0)lists[j]=rl;else lists.push(rl)}});d=d.songs}if(!Array.isArray(d))throw 0;
     let n=0;d.forEach(x=>{if(x&&x.title&&x.body){const i=songs.findIndex(y=>y.id===x.id);const rec={id:x.id||uid(),title:String(x.title),artist:String(x.artist||''),key:String(x.key||''),body:String(x.body)};if(i>=0)songs[i]=rec;else songs.push(rec);n++}});
     save();draw();document.getElementById('msg').textContent='Imported '+n+' songs.';
   }catch(err){msg.textContent='That file is not a Chord Book backup.'}};
@@ -535,6 +608,7 @@ function importAll(e){
 }
 chart=loadChart();lists=loadLists();songs=load()||[{id:'sample',title:'Amazing Grace',artist:'John Newton (public domain)',key:'G',body:'Verse 1\n[G]Amazing [G7]grace, how [C]sweet the [G]sound\nThat [G]saved a [Em]wretch like [D]me\nI [G]once was [G7]lost, but [C]now am [G]found\nWas [Em]blind but [D]now I [G]see'}];
 draw();
+if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})});
 (function(){
   const u=['https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.2/dist/umd/supabase.js','https://unpkg.com/@supabase/supabase-js@2.108.2','https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.2'];
   let i=0;
