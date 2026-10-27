@@ -476,18 +476,30 @@ function songCanvas(s,sh,md){
   return cv;
 }
 async function dlJpeg(s,btn){
-  const old=btn.innerHTML;
+  const old=btn.innerHTML,oldT=btn.title;
+  let fail='';
   try{
     btn.disabled=true;btn.textContent='…';btn.title='Making image...';
+    /* Built synchronously (no waiting) so phones still count this as a tap, which the share sheet requires. */
     const cv=songCanvas(s,shift,mode);
-    const blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',0.92));
-    if(!blob)throw 0;
+    const b64=(cv.toDataURL('image/jpeg',0.92)||'').split(',')[1];
+    if(!b64)throw 0;
+    const bin=atob(b64),u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);
     const key=songKey(s),tk=key?tr(key,shift,key):'';
     const name=((s.title+(tk?' - Key of '+tk:'')).replace(/[/:*?"<>|]/g,'').trim()||'chord-chart')+'.jpg';
-    const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);
+    const file=new File([u8],name,{type:'image/jpeg'});
+    let done=false;
+    /* On phones, open the share sheet so the picture can go straight into Photos / Gallery. */
+    if(matchMedia('(pointer:coarse)').matches&&navigator.canShare&&navigator.canShare({files:[file]})){
+      try{await navigator.share({files:[file],title:s.title});done=true}
+      catch(e){if(e&&e.name==='AbortError'){fail='Cancelled';throw 0}}
+    }
+    if(!done){
+      const u=URL.createObjectURL(file),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);
+    }
     btn.innerHTML=ICO.ok;btn.title='Saved';
-  }catch(e){btn.textContent='✕';btn.title=e&&e.code==='declined'?'Download cancelled':'Could not save'}
-  setTimeout(()=>{btn.innerHTML=old;btn.title='Download JPEG';btn.disabled=false},2500);
+  }catch(e){btn.textContent='✕';btn.title=fail||'Could not save'}
+  setTimeout(()=>{btn.innerHTML=old;btn.title=oldT;btn.disabled=false},2500);
 }
 let toastT=null;
 function undoToast(msg,restore){
