@@ -93,7 +93,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;align-items:center;gap:12px;max-width:calc(100% - 24px);background:var(--tx);color:var(--bg);border-radius:12px;padding:8px 8px 8px 16px;box-shadow:0 6px 24px rgba(0,0,0,.35)}.toast span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.toast .pill{border-color:var(--bg);color:var(--bg);flex:0 0 auto}
 .stghead{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}.stghead .stgbar{position:static;border-bottom:0}
 .setlist{position:relative;display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none}.setlist::-webkit-scrollbar{display:none}.setlist .pill{flex:0 0 auto;max-width:70vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.stgfoot{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;align-items:center;gap:6px;background:var(--bg);border-top:1px solid var(--line);padding:8px max(10px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px))}.stgfoot .pill{flex:0 0 auto;white-space:nowrap}.stgfoot .pill[disabled]{opacity:.45;cursor:default}.parts{flex:1 1 auto;min-width:0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}.parts::-webkit-scrollbar{display:none}
+.stgfoot{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;flex-direction:column;align-items:stretch;gap:8px;background:var(--bg);border-top:1px solid var(--line);padding:8px max(10px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px))}.stgfoot .pill{flex:0 0 auto;white-space:nowrap}.stgfoot .pill[disabled]{opacity:.45;cursor:default}.navrow{display:flex;gap:8px}.navrow .pill{flex:1 1 0}.parts{flex:0 0 auto;min-width:0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}.parts::-webkit-scrollbar{display:none}
 @media print{.bar,.top button,.noprint{display:none}body{background:#fff;color:#000}.ch{color:#000}}
 </style>
 </head>
@@ -428,10 +428,9 @@ function drawStage(s,key,tk){
    '<div class="sheet" style="--fs:'+sfs+'px">'+renderBody(s)+'</div>';
   const secs=[...app.querySelectorAll('.sheet .sec')],cnt={};
   const pnames=secs.map(e=>{const t=e.textContent.trim()||'Part';cnt[t]=(cnt[t]||0)+1;return cnt[t]>1?t+' ('+cnt[t]+')':t});
-  if(i>=0||secs.length)app.insertAdjacentHTML('beforeend','<div style="height:76px" aria-hidden="true"></div><div class="stgfoot noprint" id="sfoot">'+
-    (i>=0?'<button class="pill sm" data-nav="-1"'+(i===0?' disabled':'')+' aria-label="Previous song">‹ Prev</button>':'')+
-    '<div class="parts" role="group" aria-label="Jump to part of the song">'+pnames.map((n,j)=>'<button class="pill sm" data-part="'+j+'">'+esc(n)+'</button>').join('')+'</div>'+
-    (i>=0?'<button class="pill sm" data-nav="1"'+(i===l.songIds.length-1?' disabled':'')+' aria-label="Next song">Next ›</button>':'')+'</div>');
+  if(i>=0||secs.length)app.insertAdjacentHTML('beforeend','<div style="height:120px" aria-hidden="true"></div><div class="stgfoot noprint" id="sfoot">'+
+    (secs.length?'<div class="parts" role="group" aria-label="Jump to part of the song">'+pnames.map((n,j)=>'<button class="pill sm" data-part="'+j+'">'+esc(n)+'</button>').join('')+'</div>':'')+
+    (i>=0?'<div class="navrow"><button class="pill sm" data-nav="-1"'+(i===0?' disabled':'')+' aria-label="Previous song">‹ Previous</button><button class="pill sm" data-nav="1"'+(i===l.songIds.length-1?' disabled':'')+' aria-label="Next song">Next ›</button></div>':'')+'</div>');
   const $=id=>document.getElementById(id);
   document.querySelectorAll('[data-part]').forEach(b=>b.onclick=()=>{
     const el=secs[+b.dataset.part],hd=document.querySelector('.stghead');if(!el)return;
