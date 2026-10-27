@@ -112,10 +112,10 @@ const isChord=t=>{const m=CH.exec(t);return !!m&&SUF.test(m[2])};
 const SECT=/^\s*(\[?(verse|chorus|pre-?chorus|bridge|intro|outro|tag|interlude|instrumental|ending|refrain|turnaround)\b[^\[]*\]?)\s*:?\s*$/i;
 const IC=(d)=>'<svg viewBox="0 0 24 24" aria-hidden="true">'+d+'</svg>';
 const ICO={stage:IC('<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>'),pl:IC('<path d="M4 6h12M4 12h8M4 18h8"/><path d="M17 13v7M13.5 16.5h7"/>'),del:IC('<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 10v6M14 10v6"/>'),save:IC('<path d="M5 3h12l2 2v16H5z"/><path d="M8 3v6h8V3M8 21v-7h8v7"/>'),orig:IC('<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>'),dl:IC('<path d="M12 3v12M7 10l5 5 5-5M4 21h16"/>'),ok:IC('<path d="M5 12l5 5 9-10"/>')};
-let songs=[],view={name:'list'},q='',mode='chords',shift=0,fs=18,memo=null;
+let songs=[],view={name:'list'},q='',mode='chords',shift=0,fs=12,memo=null;
 let lists=[],tab='songs',showPl=false,pq='',memo2=null;
 let chart=null,kq='',kl='all',ks='all',chartDirty=false,chartT=null,chartSynced='',chartCol=null,chartNote='';
-let stage=false,auto=false,spd=3,sfs=26,scrollT=0,wl=null,cloud=null,cloudPath='',synced={},cloudState='local',pushT=null;
+let stage=false,auto=false,spd=3,sfs=16,scrollT=0,wl=null,cloud=null,cloudPath='',synced={},cloudState='local',pushT=null;
 
 function load(){try{const s=localStorage.getItem('chordbook.songs');if(s)return JSON.parse(s)}catch(e){}return memo}
 function save(){memo=songs;memo2=lists;try{localStorage.setItem('chordbook.songs',JSON.stringify(songs));localStorage.setItem('chordbook.lists',JSON.stringify(lists))}catch(e){}push()}
