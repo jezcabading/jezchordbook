@@ -91,6 +91,8 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 }
 @media (max-width:360px){.song{padding:12px 10px}h1{font-size:22px}.tpbar .tp .k{min-width:2.2em}}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;align-items:center;gap:12px;max-width:calc(100% - 24px);background:var(--tx);color:var(--bg);border-radius:12px;padding:8px 8px 8px 16px;box-shadow:0 6px 24px rgba(0,0,0,.35)}.toast span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.toast .pill{border-color:var(--bg);color:var(--bg);flex:0 0 auto}
+.stghead{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}.stghead .stgbar{position:static;border-bottom:0}
+.setlist{position:relative;display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none}.setlist::-webkit-scrollbar{display:none}.setlist .pill{flex:0 0 auto;max-width:70vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media print{.bar,.top button,.noprint{display:none}body{background:#fff;color:#000}.ch{color:#000}}
 </style>
 </head>
@@ -415,11 +417,13 @@ function bindAuth(){
 }
 function drawStage(s,key,tk){
   const app=document.getElementById('app'),l=view.from&&lists.find(x=>x.id===view.from),i=l?l.songIds.indexOf(s.id):-1;
-  app.innerHTML='<div class="stgbar noprint"><button class="pill sm" id="xs">Exit</button><b class="stt">'+esc(s.title)+'</b>'+
+  const sids=l&&i>=0?l.songIds.filter(id=>songs.some(x=>x.id===id)):[];
+  const setHtml=sids.length?'<div class="setlist" id="setl" role="list" aria-label="Songs in '+esc(l.name)+'">'+sids.map((id,j)=>{const t=songs.find(x=>x.id===id);return '<button class="pill sm'+(id===s.id?' on':'')+'" role="listitem" data-go="'+id+'"'+(id===s.id?' aria-current="true"':'')+'>'+(j+1)+'. '+esc(t.title)+'</button>'}).join('')+'</div>':'';
+  app.innerHTML='<div class="stghead noprint"><div class="stgbar"><button class="pill sm" id="xs">Exit</button><b class="stt">'+esc(s.title)+'</b>'+
    '<span class="tp"><button class="pill sm" id="dn" aria-label="Down one semitone">−</button><span class="k">'+esc(tk||'')+'</span><button class="pill sm" id="up" aria-label="Up one semitone">+</button></span>'+
    '<span class="tp"><button class="pill sm" id="fm" aria-label="Smaller text">A−</button><button class="pill sm" id="fp" aria-label="Larger text">A+</button></span>'+
    '<span class="tp"><button class="pill sm '+(auto?'on':'')+'" id="as">'+(auto?'Stop scroll':'Auto-scroll')+'</button>'+(auto?'<button class="pill sm" id="sl">Slower</button><span style="color:var(--mut);font-size:14px">Speed '+spd+'</span><button class="pill sm" id="sf">Faster</button>':'')+'</span>'+
-   (i>=0?'<span class="tp"><button class="pill sm" data-nav="-1"'+(i===0?' disabled':'')+'>Previous</button><button class="pill sm" data-nav="1"'+(i===l.songIds.length-1?' disabled':'')+'>Next</button></span>':'')+'</div>'+
+   (i>=0?'<span class="tp"><button class="pill sm" data-nav="-1"'+(i===0?' disabled':'')+'>Previous</button><button class="pill sm" data-nav="1"'+(i===l.songIds.length-1?' disabled':'')+'>Next</button></span>':'')+'</div>'+setHtml+'</div>'+
    '<div class="sheet" style="--fs:'+sfs+'px">'+renderBody(s)+'</div>';
   const $=id=>document.getElementById(id);
   $('xs').onclick=()=>{stage=false;auto=false;if(wl){wl.release().catch(()=>{});wl=null}draw()};
@@ -428,6 +432,8 @@ function drawStage(s,key,tk){
   $('as').onclick=()=>{auto=!auto;draw()};
   const sl=$('sl'),sf=$('sf');if(sl){sl.onclick=()=>{spd=Math.max(1,spd-1);draw()};sf.onclick=()=>{spd=Math.min(10,spd+1);draw()}}
   document.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>{const id=l.songIds[i+ +b.dataset.nav];if(id)go({name:'song',id,from:l.id})});
+  document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{if(b.dataset.go!==s.id)go({name:'song',id:b.dataset.go,from:l.id})});
+  const row=$('setl'),cb=row&&row.querySelector('.on');if(cb)row.scrollLeft=cb.offsetLeft-(row.clientWidth-cb.offsetWidth)/2;
   if(auto){let acc=0;scrollT=setInterval(()=>{acc+=spd*0.5;if(acc>=1){const n=Math.floor(acc);window.scrollBy(0,n);acc-=n}},40)}
 }
 const FF='"Helvetica Neue",Helvetica,Arial,sans-serif';
